@@ -1,37 +1,37 @@
-function tabulate(data, columns) {
-    var table = d3.select("body").append("table")
-            .attr("style", "margin-left: 250px"),
-        thead = table.append("thead"),
-        tbody = table.append("tbody");
+//console.log(results);
 
-    // append the header row
-    thead.append("tr")
-        .selectAll("th")
-        .data(columns)
-        .enter()
-        .append("th")
-            .text(function(column) { return column; });
-
-    // create a row for each object in the data
-    var rows = tbody.selectAll("tr")
-        .data(data)
-        .enter()
-        .append("tr");
-
-    // create a cell in each row for each column
-    var cells = rows.selectAll("td")
-        .data(function(row) {
-            return columns.map(function(column) {
-                return {column: column, value: row[column]};
-            });
-        })
-        .enter()
-        .append("td")
-        .attr("style", "font-family: Courier")
-            .html(function(d) { return d.value; });
-    
-    return table;
+/* Print results JSON */
+function appendResults(data) {
+    console.log(Object.keys(data)[0]);
+    for(var i=0; i<data.length; data++) {
+        console.log();
+        var parent = document.getElementById('results');
+        var child = document.createElement('p')
+        parent.append(data[i], child);
+    }
 }
 
-// render the table
-var peopleTable = tabulate(data, ["date", "close"]);
+/* Print results JSON */
+function printJsonKeys(data) {
+    if(Object.keys(data).length>0){
+        for(var i=0; i<Object.keys(data).length; i++) {
+            console.log(Object.keys(data)[i]);
+
+            console.log(data.model);
+            console.log(data.model.modelName);
+            for(var j=0; j<data.model.optim.length; j++) {
+                console.log(data.model.optim[j]);
+                for(var k=0; k<data.model.optim[j].variables.length; k++) {
+                    console.log(data.model.optim[j].variables[k].name);
+                    console.log(data.model.optim[j].variables[k].wtPerc);
+                }
+            }
+        }
+    }
+    else {
+        return;
+    }
+
+}
+
+printJsonKeys(results);
