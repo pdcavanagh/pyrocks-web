@@ -109,18 +109,36 @@ function printTableRow(name, value) {
 }
 
 function printBarGraph (names, data) {
-    //var data = [4, 8, 15, 16, 23, 42];
+    var width = 960,
+        height = 500;
 
-var x = d3.scale.linear()
-    .domain([0, d3.max(data)])
-    .range([0, 420]);
+    var y = d3.scale.linear()
+        .range([height, 0])
+        .domain([0, d3.max(data)]);
 
-d3.select(".chart")
-  .selectAll("div")
-    .data(data)
-  .enter().append("div")
-    .style("width", function(d) { return x(d) + "px"; })
-    .text(function(d) { return d; });
+    var chart = d3.select(".chart")
+        .attr("width", width)
+        .attr("height", height);
+
+    var barWidth = width / data.length;
+
+    var bar = chart.selectAll("g")
+          .data(data)
+        .enter().append("g")
+          .attr("transform", function(d, i) { return "translate(" + i * barWidth + ",0)"; });
+
+    bar.append("rect")
+        .attr("y", function(d) { return y(d); })
+        .attr("width", barWidth - 1)
+        .attr("height", function(d) { return height - y(d); });
+
+    bar.append("text")
+        //.attr("x", function(d) { return x(d) - 3; })
+        .attr("x", barWidth / 2)
+        .attr("dx", "1em")
+        .attr("y", function(d) { return y(d) + 3; })
+        .attr("dy", "0.75em")
+        .text( function (d) { return d;});
 }
 
 printJsonResults(results);
